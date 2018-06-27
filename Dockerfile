@@ -13,7 +13,11 @@ ARG APP_DIR="/app"
 ARG USER_ID=1000
 
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
-ENV PATH=$PATH:/home/node/.npm-global/bin
+ENV PATH=$PATH:$NPM_CONFIG_PREFIX
+
+ENV ADDITIONAL_NPM_MODULES="  "
+
+ENV GLOBAL_NPM_MODULES="@angular/cli@$NG_CLI_VERSION $ADDITIONAL_NPM_MODULES"
 
 ENV NPM_CONFIG_LOGLEVEL warn
 #angular-cli rc0 crashes with .angular-cli.json in user home
@@ -28,7 +32,7 @@ RUN set -xe \
     && chown $USER_ID $USER_HOME_DIR \
     && chmod a+rw $USER_HOME_DIR \
     && chown -R node /usr/local/lib /usr/local/include /usr/local/share /usr/local/bin \
-    && (cd "$USER_HOME_DIR"; su node -c "npm install -g @angular/cli@$NG_CLI_VERSION; npm install -g yarn; chmod +x /usr/local/bin/yarn; npm cache clean --force")
+    && (cd "$USER_HOME_DIR"; su node -c "npm install -g $GLOBAL_NPM_MODULES; npm cache clean --force")
 
 #not declared to avoid anonymous volume leak
 #VOLUME "$USER_HOME_DIR/.cache/yarn"
