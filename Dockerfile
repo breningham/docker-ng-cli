@@ -3,14 +3,17 @@
 #or specify angular-cli version
 #docker build --build-arg NG_CLI_VERSION=6.0.8
 
-FROM node:8-stretch
+FROM node:9-stretch
 
-MAINTAINER trion development GmbH "info@trion.de"
+MAINTAINER Brendan Ingham "b.ingham@spartadigital.co.uk"
 
 ARG NG_CLI_VERSION=6.0.8
 ARG USER_HOME_DIR="/tmp"
 ARG APP_DIR="/app"
 ARG USER_ID=1000
+
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+ENV PATH=$PATH:/home/node/.npm-global/bin
 
 ENV NPM_CONFIG_LOGLEVEL warn
 #angular-cli rc0 crashes with .angular-cli.json in user home
